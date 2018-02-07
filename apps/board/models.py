@@ -338,9 +338,9 @@ class Banner(BasePost):
         _("링크 URL"),
         null=True)
 
-    image = models.ForeignKey(
-        'AttachedFile',
-        verbose_name=_("이미지"))
+    image = models.ImageField(
+        _("이미지"),
+        upload_to='banner')
 
     class Meta:
         verbose_name = _('배너')
@@ -388,7 +388,6 @@ class Link(BasePost):
     def __str__(self):
         return self.text
 
-
 def get_upload_path(instance, filename):
     """
     첨부파일이 업로드 되는 경로를 반환하는 함수.
@@ -396,8 +395,7 @@ def get_upload_path(instance, filename):
     첨부파일은 포스트별로 다른 디렉토리에 저장됩니다.
     """
     return os.path.join("post-%d" % instance.post.id, filename)
-
-
+        
 class AttachedFile(models.Model):
     """
     포스트 첨부파일을 구현한 모델.
