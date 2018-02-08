@@ -2,7 +2,7 @@
 고정 페이지 뷰.
 """
 
-from apps.board.models import Board
+from apps.board.models import Board, BannerCarousel
 
 from .base import PageView
 
@@ -23,6 +23,7 @@ class MainPageView(PageView):
         context = super().get_context_data(**kwargs)
         context['boards'] = Board.objects.accessible_for(
             self.request.user).filter(is_main=True)
+        context['bannerCarousel'] = BannerCarousel.objects.get(category='main')
         return context
 
 
