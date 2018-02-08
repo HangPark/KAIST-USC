@@ -4,6 +4,7 @@ __pycache__/
 
 # Django
 db.sqlite3
+migrations/
 local_settings.py
 
 # Swap files
@@ -23,3 +24,6 @@ venv/
 
 # Python mode
 **/.ropeproject/
+
+# VScode
+.vscode/

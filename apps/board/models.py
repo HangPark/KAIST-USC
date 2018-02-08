@@ -352,6 +352,70 @@ class Comment(BasePost):
         """
         return self.parent_post.board.is_permitted(user, permission)
 
+class Banner(BasePost):
+    """
+    배너를 구현한 모델
+    AttachedFile을 백그라운드 이미지로 사용한다
+    """
+
+    title = models.CharField(
+        _("제목"),
+        max_length=128)
+
+    url = models.URLField(
+        _("링크 URL"),
+        null=True)
+
+    image = models.ImageField(
+        _("이미지"),
+        upload_to='banner')
+
+    class Meta:
+        verbose_name = _('배너')
+        verbose_name_plural = _('배너(들)')
+
+    def __str__(self):
+        return self.title
+
+class BannerCarousel(models.Model):
+    """
+    배너 Carousel을 구현한 모델
+    """
+    banners = models.ManyToManyField(
+        Banner,
+        verbose_name=_("배너")
+    )
+
+    category = models.CharField(
+        _("카테고리"),
+        max_length=32, unique=True)
+
+    class Meta:
+        verbose_name = _('배너그룹')
+        verbose_name_plural = _('배너그룹(들)')
+
+    def __str__(self):
+        return self.category
+
+class Link(BasePost):
+    """
+    링크를 구현한 모델
+    """
+
+    url = models.URLField(
+        _("URL"))
+
+    text = models.CharField(
+        _("텍스트"),
+        max_length=128)
+
+    class Meta:
+        verbose_name = _('링크')
+        verbose_name_plural = _('링크(들)')
+
+    def __str__(self):
+        return self.text
+
 class Contact(BasePost):
     """
     기구 등의 연락망 (소통창구, 오픈톡방, 전화번호)을 구현한 모델.
@@ -505,8 +569,7 @@ def get_upload_path(instance, filename):
     첨부파일은 포스트별로 다른 디렉토리에 저장됩니다.
     """
     return os.path.join("post-%d" % instance.post.id, filename)
-
-
+        
 class AttachedFile(models.Model):
     """
     포스트 첨부파일을 구현한 모델.
