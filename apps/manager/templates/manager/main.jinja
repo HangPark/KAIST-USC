@@ -39,7 +39,9 @@
   <div id="main-page" class="page-item container-fluid">
     <div class="row">
       <div class="col-sm-12">
-        {% include 'board/banner_carousel.jinja' %}
+        {% if bannerCarousel %}
+        {% include 'board/banner_carousel.jinja' with context%}
+        {% endif %}
       </div>
       <div id="main-page-content">
         <div id="main-board-list" class="col-sm-6">
