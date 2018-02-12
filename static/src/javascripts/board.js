@@ -47,8 +47,10 @@ $().ready(function() {
         if ($btn.hasClass("disabled"))
             return;
         $btn.addClass("disabled");
+        console.log("Doing JS");
         $.post("./comment/", $("#comment-form").serialize())
             .done(function(data) {
+                console.log("Done",data);
                 $("#comment-list").append(data);
                 $(".comment-content:last").each(function () {
                     $(this).html(convert2html($(this).html()));
@@ -60,6 +62,7 @@ $().ready(function() {
                 $btn.removeClass("disabled");
             });
     });
+
 
     $("#comment-list").on('click', ".comment-remove", function() {
         var $comment = $(this).parents(".comment");
@@ -86,4 +89,17 @@ $().ready(function() {
                 alert("권한이 없습니다.");
             });
     });
+
+
+    $("#id_due_date").datepicker({
+        altFormat: "yyyy-mm-dd",
+        minDate: new Date(),
+        maxDate: "+15d",
+    });
+    if($("#id_due_date").val() == ''){
+        $("#id_due_date").datepicker("setDate", new Date());
+    }
+    
+   
+    
 });
