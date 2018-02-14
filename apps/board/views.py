@@ -9,9 +9,10 @@ from django.http import Http404, HttpResponse, HttpResponseRedirect
 from apps.manager import Custom404
 from apps.manager.constants import *
 from apps.manager.views import ServiceView
+from apps.board.constants import *
 
-from .forms import PostForm
-from .models import ACTIVITY_VOTE, Comment, Post, Tag, BoardTab
+from .forms import PostForm, ProjectPostForm
+from .models import ACTIVITY_VOTE, Comment, Post, ProjectPost, Tag, BoardTab
 
 
 class BoardView(ServiceView):
@@ -66,9 +67,9 @@ class BoardView(ServiceView):
 
         # 게시글 목록 조회
         if (tab):
-            post_list = Post.objects.filter(board=board, board_tab=tab)
+            post_list = board.post_set.filter(board_tab=tab)
         else:
-            post_list = Post.objects.filter(board=board)
+            post_list = board.post_set.all()
 
         # 태그 필터링
         tag = self.request.GET.get('tag')
@@ -136,7 +137,12 @@ class PostView(BoardView):
         if not super().has_permission(request, *args, **kwargs):
             return False
         self.required_permission = required_permission
-        post = Post.objects.filter(
+        
+        if self.service.board.role == BOARD_ROLE_PROJECT:
+            postModel = ProjectPost
+        else:
+            postModel = Post
+        post = postModel.objects.filter(
             board=self.service.board, id=kwargs['post']).first()
 
         if not post:
@@ -168,6 +174,10 @@ class PostView(BoardView):
         # 게시글에 첨부된 파일 목록 저장
         context['files'] = self.post_.attachedfile_set.all()
 
+        # 게시글에 저장된 스케쥴 저장
+        if self.service.board.role == BOARD_ROLE_PROJECT:
+            context['schedules'] = self.post_.schedule_set.all()
+
         return context
 
 
@@ -178,7 +188,7 @@ class PostWriteView(BoardView):
     기본 필요권한이 쓰기권한으로 설정되어 있습니다.
     """
 
-    template_name = 'board/post_form.jinja'
+    template_name = 'board/post_form/post_form.jinja'
     required_permission = PERM_WRITE
 
     def get_context_data(self, **kwargs):
@@ -186,7 +196,10 @@ class PostWriteView(BoardView):
         게시글 작성 폼을 컨텍스트에 추가하는 메서드.
         """
         context = super().get_context_data(**kwargs)
-        context['form'] = PostForm(self.service.board)
+        if self.service.board.role == BOARD_ROLE_PROJECT:
+            context['form'] = ProjectPostForm(self.service.board)
+        else:
+            context['form'] = PostForm(self.service.board)
         return context
 
     def post(self, request, *args, **kwargs):
@@ -198,8 +211,13 @@ class PostWriteView(BoardView):
         재전달하여 수정을 요구합니다.
         """
         user = request.user if request.user.is_authenticated() else None
-        post = Post(author=user, board=self.service.board)
-        form = PostForm(self.service.board, request.POST, request.FILES, instance=post)
+
+        if self.service.board.role == BOARD_ROLE_PROJECT:
+            post = ProjectPost(author=user, board=self.service.board)
+            form = ProjectPostForm(self.service.board, request.POST, request.FILES, instance=post)
+        else:
+            post = Post(author=user, board=self.service.board)
+            form = PostForm(self.service.board, request.POST, request.FILES, instance=post)
         if form.is_valid():
             form.save(request.POST, request.FILES)
             return HttpResponseRedirect(post.get_absolute_url())
@@ -215,7 +233,7 @@ class PostEditView(PostView):
     기본 필요권한이 수정권한으로 설정되어 있습니다.
     """
 
-    template_name = 'board/post_form.jinja'
+    template_name = 'board/post_form/post_form.jinja'
     required_permission = PERM_EDIT
 
     def get_context_data(self, **kwargs):
@@ -224,7 +242,11 @@ class PostEditView(PostView):
         """
         context = super().get_context_data(**kwargs)
         post = self.post_
-        context['form'] = PostForm(self.service.board, instance=post)
+
+        if self.service.board.role == BOARD_ROLE_PROJECT:
+            context['form'] = ProjectPostForm(self.service.board, instance=post)
+        else:
+            context['form'] = PostForm(self.service.board, instance=post)
         return context
 
     def post(self, request, *args, **kwargs):
@@ -237,6 +259,12 @@ class PostEditView(PostView):
         """
         post = self.post_
         form = PostForm(self.service.board, request.POST, request.FILES, instance=post)
+
+        if self.service.board.role == BOARD_ROLE_PROJECT:
+            form = ProjectPostForm(self.service.board, request.POST, request.FILES, instance=post)
+        else:
+            form = PostForm(self.service.board, request.POST, request.FILES, instance=post)
+            
         if form.is_valid():
             form.save(request.POST, request.FILES)
             return HttpResponseRedirect(post.get_absolute_url())

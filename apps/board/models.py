@@ -57,7 +57,7 @@ class BoardTab(BaseService):
     url = models.CharField(
         _("하위 주소"),
         max_length=32,
-        help_text=_("탭을 나타낼 하위 경로만 적어주세요."))
+        help_text=_("탭을 나타낼 하위 경로만 적어주세요('/'를 포함하면 안됩니다)"))
 
     #: 커스텀 매니저
     objects = ServiceManager()
@@ -515,32 +515,23 @@ class Product(models.Model):
 
     def __str__(self):
         return self.board_tab.name + "에서 파는 " + self.title
-
     
 class ProjectPost(Post):
-    
-    PROJECT_STATUS_CHOICES = (
-        (PROJECT_STATUS_ALWAYS, _('항상')),
-        (PROJECT_STATUS_DONE, _('완료')),
-        (PROJECT_STATUS_QUIT, _('파기')),
-        (PROJECT_STATUS_ONGOING, _('진행중')),
-    )
-    
-    status = models.IntegerField(
-        _("프로젝트 진행 상태"),
-        choices=PROJECT_STATUS_CHOICES, default=PROJECT_STATUS_ALWAYS)
-    
+    """
+    사업 게시글 구현한 모델.
+    사업 진행사항은 Post 모델의 tag로 대체한다
+    """
+
     is_pledge = models.BooleanField(
-        _("공약 여부"),
+        _("공약"),
         default=False)
     
-    alteration = models.ForeignKey(
-        BasePost,
-        verbose_name=_("프로젝트 일정"))
-    
+    class Meta:
+        verbose_name = _('사업 포스트')
+        verbose_name_plural = _('사업 포스트(들)')
+
     def get_bureau(self):
         return self.board_tab.name
-
 
 class DebatePost(Post):
     
@@ -556,6 +547,22 @@ class DebatePost(Post):
         return (self.author.is_superuser or self.vote_up > 2)
     
     
+class Schedule(models.Model):
+    title = models.CharField(
+        _("일정"),
+        max_length=128)
+
+    date = models.DateTimeField(
+        _("날짜"))
+    
+    post = models.ForeignKey(
+        ProjectPost,
+        verbose_name=_("게시글"))
+
+    class Meta:
+        ordering = ['date']
+        verbose_name = _('일정')
+        verbose_name_plural = _('일정(들)')
 
 class WebDoc(models.Model):
     """
