@@ -21,7 +21,11 @@ def is_tester(user):
     if not user.is_authenticated or not hasattr(user, 'portal_info'):
         return False
 
-    return user.portal_info.ku_std_no in ("20140191", "20170742", "20170286", "20170463", "20150305", "20170337", "20170656",)
+    return user.portal_info.ku_std_no in (
+        "20110208",
+        "20180379",
+        "20180419",
+    )
 
 
 def is_vote_period():
