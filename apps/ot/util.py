@@ -14,7 +14,7 @@ def is_freshman(user):
         return False
 
     portal_info = user.portal_info
-    return portal_info.ku_std_no[:4] == "2018" and portal_info.ku_acad_prog == "학사"
+    return portal_info.ku_std_no[:4] == "2019" and portal_info.ku_acad_prog == "학사"
 
 
 def is_tester(user):
