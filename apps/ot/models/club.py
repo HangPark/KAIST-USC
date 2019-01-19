@@ -18,6 +18,7 @@ class Club(models.Model):
         verbose_name='동아리 이름',
     )
     pages = models.TextField(
+        blank=True,
         verbose_name='동아리 페이스북/유튜브 페이지 주소',
     )
     intro = models.TextField(
@@ -29,10 +30,12 @@ class Club(models.Model):
     )
 
     video_url1 = models.CharField(
+        blank=True,
         max_length=63,
         verbose_name='동아리 소개 비디오 주소 #1',
     )
     video_url2 = models.CharField(
+        blank=True,
         max_length=63,
         verbose_name='동아리 소개 비디오 주소 #2',
     )
