@@ -21,6 +21,10 @@ class Club(models.Model):
         blank=True,
         verbose_name='동아리 페이스북/유튜브 페이지 주소',
     )
+    one_line_intro = models.TextField(
+        blank=True,
+        verbose_name='동아리 한 줄 소개(메인 화면)',
+    )
     intro = models.TextField(
         verbose_name='동아리 소개',
     )
