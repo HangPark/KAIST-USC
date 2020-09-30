@@ -37,7 +37,7 @@ Go to 4) if you are updating already deployed one.
 
 
 Website
--------
+--------
 
 Available at https://student.kaist.ac.kr/
 
