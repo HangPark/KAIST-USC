@@ -1,7 +1,7 @@
 KAIST USC: KAIST Undergraduate Student Council Website on Django
 ================================================================
 
-Welcome to **KAIST USC**!
+Welcom to **KAIST USC**!
 
 **KAIST USC** is the open source project to construct `KAIST Undergraduate Student Council Website`_ on `Django`_ to make memebers participate in USC well. This project includes front-ent and back-end sources with a production enviornment settings by using `Docker`_.
 
@@ -9,7 +9,7 @@ Welcome to **KAIST USC**!
 Deploy
 ------
 
-Go to 4) if you are updating already deployed one.
+Go to 4) if you are updating already deploy one.
 
 1) Install certbot and get letsencrypt certbot.
 
