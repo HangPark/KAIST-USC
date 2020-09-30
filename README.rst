@@ -8,6 +8,7 @@ Welcome to **KAIST USC**!
 
 Deploy
 ------
+------
 
 Go to 4) if you are updating already deployed one.
 
@@ -38,11 +39,13 @@ Go to 4) if you are updating already deployed one.
 
 Website
 -------
+-------
 
 Available at https://student.kaist.ac.kr/
 
 
-Documentation
+Documentations
+-------------
 -------------
 
 See https://hangpark.github.io/kaistusc/ (Korean)
