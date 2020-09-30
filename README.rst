@@ -13,7 +13,7 @@ Go to 4) if you are updating already deployed one.
 
 1) Install certbot and get letsencrypt certbot.
 
-2) Write proxy server setting in the host. (SSL, proxypass to the port binded on the docker service "web")
+2) Write proxy server by setting in the host. (SSL, proxypass to the port binded on the docker service "web")
 
 3) Go to project root and write .env file as follows:
 
