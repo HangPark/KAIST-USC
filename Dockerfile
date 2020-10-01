@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM ubuntu:16.04 AN AWESOME PROJECT
 MAINTAINER Hang Park <hangpark@kaist.ac.kr>
 
 # Install packages
