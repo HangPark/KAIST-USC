@@ -36,7 +36,7 @@ Go to 4) if you are updating already deployed one.
 4) serveruser:/root/of/project $ **docker-compose up -d --build**
 
 
-Website
+Website is Available
 -------
 
 Available at https://student.kaist.ac.kr/
