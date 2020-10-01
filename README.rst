@@ -1,4 +1,4 @@
-KAIST USC: KAIST Undergraduate Student Council Website on Django
+KAIST USC: KAIST Undergraduate Student amazing website for counciling 
 ================================================================
 
 Welcome to **KAIST USC**!
